@@ -1,10 +1,20 @@
 import rodados.*
+import pedidos.*
 
 describe "test de rodados" {
 
   const deportes = new Dependencia(empleados=45)
   const cultura = new Dependencia(empleados=31)
   const cachito = new Corsa(color="rojo")
+  const pedido1 = new Pedido(distancia = 960, tiempoMax = 8, cantidadDePasajeros = 4, 
+                            coloresIncompatibles = ["azul", "negro"])
+  const pedido2 = new Pedido(distancia = 960, tiempoMax = 8, cantidadDePasajeros = 4, 
+                            coloresIncompatibles = ["azul", "negro", "rojo"])
+  const pedido3 = new Pedido(distancia = 960, tiempoMax = 8, cantidadDePasajeros = 6, 
+                            coloresIncompatibles = ["azul", "negro"])
+  const pedido4 = new Pedido(distancia = 960, tiempoMax = 6, cantidadDePasajeros = 6, 
+                            coloresIncompatibles = ["azul", "negro"])
+
 
   method initialize() {
     deportes.agregarAFlota(cachito)
@@ -39,5 +49,27 @@ describe "test de rodados" {
   test "la capacidad total en color azul de deportes es 7" {
     assert.equals(7,deportes.capacidadTotalEnColor("azul"))
   }
-
+  test "Cachito puede satisfacer la demanda del pedido1 tal como es al inicio, pero si luego
+  no es compatible con el color rojo, cachito no puede satifascerlo, tampoco si la capacidad cambia
+  a 6 pasajeros, o si el tiempo de viaje max cambia a 6hs" {
+    assert.that(pedido1.pedidoPuedeSerResueltoPor(cachito))
+    pedido1.agregarColorIncompatible("rojo")
+    assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+    pedido1.cantidadDePasajeros(6)
+    assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+    pedido1.tiempoMax(6)
+    assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+  }
+  // test "Si ahora el pedido1 no es compatible con el color rojo, cachito no puede satifascerlo" {
+  //   pedido1.agregarColorIncompatible("rojo")
+  //   assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+  // }
+  // test "No satisface el pedido1 si ahora este necesita una capacidad de 6" {
+  //   pedido1.cantidadDePasajeros(6)
+  //   assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+  // }
+  // test "Ocurre lo mismo si el tiempo máximo del pedido1 ahora es de 6hs" {
+  //   pedido1.tiempoMax(6)
+  //   assert.notThat(pedido1.pedidoPuedeSerResueltoPor(cachito))
+  // }
 }

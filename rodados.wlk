@@ -1,4 +1,5 @@
 import wollok.game.*
+import pedidos.*
 
 class Corsa {
     var property color
@@ -69,6 +70,7 @@ object popular {
 
 class Dependencia {
     const flota = []
+    const pedidos = []
     var property empleados = 0
     method agregarAFlota(rodado) {flota.add(rodado)}
     method quitarDeFlota(rodado) {flota.remove(rodado)}
@@ -86,8 +88,19 @@ class Dependencia {
     method capacidadFaltante() = (empleados - self.capacidadDeLaFlota()).max(0)
     method capacidadDeLaFlota() = flota.sum({r=>r.capacidad()})
     method esGrande() = empleados >= 40 && self.tieneAlMenosRodados(5)
+    method agregarPedido(unPedido) {
+      pedidos.add(unPedido)
+    }
+    method quitarPedido(unPedido) {
+      pedidos.remove(unPedido)
+    }
+    method responderAlPedido(unPedido) {
+        unPedido.pedidoPuedeSerResueltoPor(self)
+    }
+    method totalDePasajerosEnLosPedidos() = pedidos.sum({p => p.cantidadDePasajeros()})
+    method pedidosQueNoSePuedenResolver() = 
 }
 
 object coloresValidos {
-    const property listaColores = #{"rojo","verde","azul","blanco"}
+    const property listaColores = #{"rojo","verde","azul","blanco", "beige"}
 }
